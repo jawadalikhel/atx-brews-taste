@@ -1,25 +1,29 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import logo from './logo.svg';
 import './App.css';
-
+import BrewTour from './mainComponents/brew-components/BrewTour';
+import NavBar from '../src/mainComponents/ui-components/NavBar';
+import Login from './mainComponents/auth/Login';
+import MainComponent from './mainComponents/brew-components/brewsLandingPage';
+import Register from './mainComponents/auth/Register';
+import OtherMap from './mainComponents/brew-components/useTourMap';
 function App() {
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NavBar />
+      <Route
+        exact path='/login'
+          render={(props) => <Login  {...props} />}
+      />
+        <Route exact path="/register" component={Register}/>
+        <Route exact path="/" component={MainComponent}/>
+        <Route exact path="/brewTour" component={BrewTour} />
+        <Route exact path="/OtherMap" component={OtherMap} />
     </div>
+  </Router>
   );
 }
 

@@ -38,28 +38,32 @@ class OtherMap extends React.PureComponent {
 
   getBrewsInDB = () => {
     const db = firebase.firestore();
-    firebase.auth().onAuthStateChanged(async(user) =>{
-      console.log(user.uid, '<----- userrrr')
-      let doc = 'UserData-' + user.uid
-      console.log(doc, 'doc')
-      await db.collection(doc).orderBy('timestamp',"asc")
-        .onSnapshot(async(result) => {
-          let array = [];
-          await result.forEach((item, index) => {
-            console.log(item.data(), 'created/MIRZA')
-            array.push(item.data());
-          })
-          await this.setState({
-            brewsFromDB: array
-          })
+
+      // let doc = 'UserData-' + user.uid
+      // console.log(doc, 'doc')
+      // db.collection(doc).orderBy('timestamp',"asc")
+      //   .onSnapshot(async(result) => {
+      //     let array = [];
+      //     result.forEach((item, index) => {
+      //       console.log(item.data(), 'created/MIRZA')
+      //       array.push(item.data());
+      //     })
+      //     this.setState({
+      //       brewsFromDB: array
+      //     })
   
-        })
+      //   })
   
-    })
   };
 
   componentDidMount() {
-    this.getBrewsInDB();
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user === null) {
+        this.props.history.push('/login')
+      } else {
+        this.getBrewsInDB();
+      }
+    })
   }
 
   onHover = (name, address, opening_hours, photos, rating, website) => {
@@ -94,7 +98,6 @@ class OtherMap extends React.PureComponent {
     }
     return (
       <div style={{height: height, marginTop: '-.6%', display: 'flex'}}>
-        <h1>HELLLLLLLOOOOOOOO</h1>
         {/* {this.state.brews ? <DisplayMap brews={this.state.brews} />: null} */}
 
         <div style={{height: '95%',width: '100%',fontWeight: 'bold' , display: 'flex', flexDirection: 'column'}} >

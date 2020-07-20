@@ -4,6 +4,7 @@ import TacoMapContainer from '../../tacos-components/TacoMapContainer';
 import Tacos from '../../tacos-components/Tacos'
 import swal from '@sweetalert/with-react';
 // import '../App.css';
+import firebase from '../../../firebaseConfig/index'
 
 
 class BrewTour extends Component {
@@ -42,12 +43,18 @@ class BrewTour extends Component {
 
 
   componentDidMount() {
-    this.getTourData().then((data) => {
-      this.setState({
-        tourData: data
-      })
-    }).catch((err) => {
-      console.log(err);
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user === null) {
+        this.props.history.push('/login')
+      } else {
+        this.getTourData().then((data) => {
+          this.setState({
+            tourData: data
+          })
+        }).catch((err) => {
+          console.log(err);
+        })
+      }
     })
   }
 

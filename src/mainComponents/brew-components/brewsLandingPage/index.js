@@ -23,19 +23,19 @@ class Brewery extends Component {
           swal('Login with google to continue')
           this.props.history.push('/login')
         } else {
-          console.log(user.uid, '<----- userrrr')
-          let doc = 'UserData-' + user.uid
-          console.log(doc, 'doc')
-          await db.collection(doc).orderBy('timestamp',"asc")
-            .onSnapshot(async(result) => {
-              let array = [];
-              await result.forEach((item, index) => {
-                console.log(item.data(), 'created/MIRZA')
-                array.push(item.data());
-              })
-              await this.setState({
-                brewsFromDB: array
-              })
+          // let doc = 'UserData-' + user.uid
+          let allData = await db.collection('Cities').doc('Austin').collection('Breweries')
+          console.log(allData, '<---- allData')
+          allData.get()
+            .then(async(result) => {
+              console.log(result, '<-------')
+              // let array = [];
+              // await result.forEach((item, index) => {
+              //   array.push(item.data());
+              // })
+              // await this.setState({
+              //   brewsFromDB: array
+              // })
             })
         }
 
@@ -50,11 +50,8 @@ class Brewery extends Component {
       if (user === null) {
           return;
       } else {
-        console.log('hello')
         let User = 'UserData-' + firebase.auth().currentUser.uid;
-        console.log(place_id, 'place_id')
         db.collection(User).doc(place_id).delete().then(function() {
-          console.log("Document successfully deleted!");
         }).catch(function(error) {
           console.log("Error removing document: ", error);
         });
@@ -105,14 +102,21 @@ getGeoLocation = async (data,  index) => {
   }
 
 componentDidMount() {
-  this.getBrewsInDB();
+  firebase.auth().onAuthStateChanged((user) =>{
+    if(user){
+      this.getBrewsInDB();
+      console.log(user, '<---- userrrr')
+    }else{
+      this.props.history.push('/');
+    }
+  })
  
 }
 
   render() {
     
     if (this.state.brewsFromDB) {
-      console.log(this.state.brewsFromDB, 'brewsFromDB')
+      console.log(this.state.brewsFromDB, '<---- brewsFromDB')
     }
 
     const tripContainerStyle = {

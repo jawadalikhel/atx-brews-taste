@@ -18,10 +18,10 @@ function App() {
         exact path='/login'
           render={(props) => <Login  {...props} />}
       />
-        <Route exact path="/register" component={Register}/>
+        <Route path="/register" component={Register}/>
         <Route exact path="/" component={MainComponent}/>
-        <Route exact path="/brewTour" component={BrewTour} />
-        <Route exact path="/OtherMap" component={OtherMap} />
+        <Route path="/brewTour" component={BrewTour} />
+        <Route path="/OtherMap" component={OtherMap} />
     </div>
   </Router>
   );

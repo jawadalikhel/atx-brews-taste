@@ -6,14 +6,20 @@ import firebase from '../../../firebaseConfig';
 
 export default class MenuExampleInvertedSecondary extends Component {
 
-  state = { activeItem: 'home' }
+  state = { activeItem: 'home', loggedin: true }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-  // breweriesInDB = () => {
-  //   const db = firebase.firestore();
-
-  // }
+  handleSignout = (e) =>{
+    e.preventDefault()
+    firebase.auth().signOut().then(()=> {
+      // console.log('user is logout now')
+      this.setState({
+        loggedin: false
+      })
+      this.props.history.push('/login')
+    }).catch(function(error) {
+      // An error happened.
+    });
+  }
 
   componentDidMount() {
     const db = firebase.firestore();
@@ -21,21 +27,19 @@ export default class MenuExampleInvertedSecondary extends Component {
       if (user === null) {
         return;
       } else {
-        console.log(user, '<----- userrrr')
-        let doc = 'UserData-' + user.uid
-        console.log(doc, 'doc')
-        await db.collection(doc).orderBy('timestamp', "asc")
-          .onSnapshot(async (result) => {
-            let array = [];
-            await result.forEach((item, index) => {
-              console.log(item.data(), 'created')
-              array.push(item.data());
-            })
-            await this.setState({
-              brewTour: array
-            })
+        // let doc = 'UserData-' + user.uid
+        // console.log(doc, 'doc')
+        // await db.collection(doc).orderBy('timestamp', "asc")
+        //   .onSnapshot(async (result) => {
+        //     let array = [];
+        //     await result.forEach((item, index) => {
+        //       array.push(item.data());
+        //     })
+        //     await this.setState({
+        //       brewTour: array
+        //     })
 
-          })
+        //   })
       }
     })
   }
@@ -43,7 +47,6 @@ export default class MenuExampleInvertedSecondary extends Component {
   render() {
 
     if (this.state.brewTour) {
-      console.log(this.state.brewTour, 'brewToyr')
     }
 
     const { activeItem } = this.state
@@ -84,42 +87,21 @@ export default class MenuExampleInvertedSecondary extends Component {
 
             <Image src={require('../images/logoCircle.png')} style={{ height: '60px', marginTop: '-10px' }} />
 
+            <Link style={style} to="/">Home</Link>
 
-            <Menu.Item name='home'
-              active={activeItem === 'home'}
-              onClick={this.handleItemClick}>
-              <Link style={style} to="/">Home</Link>
-            </Menu.Item>
-
-            <Menu.Item name='View Your Tour'
-              active={activeItem === 'View Your Tour'}
-              onClick={this.handleItemClick}>
-
-              <Link style={this.state.brewTour ? this.state.brewTour.length < 5 ? style : styleFull : null} to="/OtherMap">View Your Tour</Link>
-
-            </Menu.Item>
+            {
+              (this.state.loggedin) ? 
+                <Link style={this.state.brewTour ? this.state.brewTour.length < 5 ? style : styleFull : null} to="/OtherMap">View Your Tour</Link>
+              : null
+            }
 
             <p style={headingStyle}>Pints And Shells</p>
+            <a style={style} href="https://github.com/jawadalikhel/atx-brews-taste">GitHub</a>
 
-            <Menu.Item name='GitHub'
-              position='right'
-              href='https://github.com/jawadalikhel/Pints-And-Shells-On-Fire'
-              active={activeItem === 'GitHub'}
-              onClick={this.handleItemClick}>
-              <Link style={style} to="">GitHub</Link>
-            </Menu.Item>
-
-            <Menu.Item name='Logout'
-              active={activeItem === 'Logout'}
-              onClick={this.handleItemClick}>
-              <Link style={style} to="/login">Logout</Link>
-            </Menu.Item>
-
-            <Menu.Item name='Login'
-              active={activeItem === 'Login'}
-              onClick={this.handleItemClick}>
-              <Link style={style} to="/login">Login</Link>
-            </Menu.Item>
+            {
+              (this.state.loggedin) ? <button onClick={this.handleSignout}>Logout</button>
+              : <Link style={style} to="/login">Login</Link>
+            }
 
           </Menu>
         </Segment>

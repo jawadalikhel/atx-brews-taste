@@ -59,18 +59,20 @@ class Login extends Component {
         await this.props.history.push('/');
 
 
-        const addUserResponse = await addUserToDB.json();
-
-   
-        // const db = firebase.firestore();
-        // db.collection('User').doc(firebase.auth().currentUser.uid)
-        // .set({
-        //   name: user.additionalUserInfo.profile.name,
-        //   id: user.additionalUserInfo.profile.id,
-        //   email: user.additionalUserInfo.profile.email,
-        //   family_name: user.additionalUserInfo.profile.family_name,
-        //   given_name: user.additionalUserInfo.profile.given_name,
-        //   googleUserId: user.user.uid
+        await addUserToDB.json()
+        // .then(() =>{
+        //   const db = firebase.firestore();
+        //   db.collection('User').doc(firebase.auth().currentUser.uid)
+        //   .set({
+        //     name: user.additionalUserInfo.profile.name,
+        //     id: user.additionalUserInfo.profile.id,
+        //     email: user.additionalUserInfo.profile.email,
+        //     family_name: user.additionalUserInfo.profile.family_name,
+        //     given_name: user.additionalUserInfo.profile.given_name,
+        //     googleUserId: user.user.uid
+        //   }).then((result) =>{
+        //     console.log('user added to firestore')
+        //   })
         // })
       } else {
         this.props.history.push('/')
@@ -130,15 +132,12 @@ class Login extends Component {
     return (
 
       <div className="Login">
-        <h2 style={headingStyle}>Sign in below with Google</h2>
+        <h2>Sign in below with Google</h2>
 
       <br />
       <br />
 
       <Button style={loginStyle} onClick={this.handleSubmit}>Google Login</Button>
-
-
-
       </div>
 
       )

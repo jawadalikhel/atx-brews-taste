@@ -6,60 +6,72 @@ import firebase from '../../../firebaseConfig';
 
 export default class MenuExampleInvertedSecondary extends Component {
 
-  state = { activeItem: 'home', loggedin: true }
+  constructor(){
+    super();
+    this.state = {
+      activeItem: 'home',
+      signout: false 
+    }
+  }
 
   handleSignout = (e) =>{
-    e.preventDefault()
-    firebase.auth().signOut().then(()=> {
-      // console.log('user is logout now')
+    // e.preventDefault()
+    firebase.auth().signOut().then((result)=> {
+      console.log(result, '<---- logged out result')
       this.setState({
-        loggedin: false
+        signout: true
       })
-      this.props.history.push('/login')
-    }).catch(function(error) {
+    }).then(() =>{
+      this.props.history.push('/')
+    })
+    .catch(function(error) {
       // An error happened.
     });
   }
 
-  componentDidMount() {
-    const db = firebase.firestore();
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user === null) {
-        return;
-      } else {
-        // let doc = 'UserData-' + user.uid
-        // console.log(doc, 'doc')
-        // await db.collection(doc).orderBy('timestamp', "asc")
-        //   .onSnapshot(async (result) => {
-        //     let array = [];
-        //     await result.forEach((item, index) => {
-        //       array.push(item.data());
-        //     })
-        //     await this.setState({
-        //       brewTour: array
-        //     })
+  // componentDidMount() {
+  //   const db = firebase.firestore();
+  //   firebase.auth().onAuthStateChanged(async (user) => {
+  //     if (user === null) {
+  //       return;
+  //     } else {
+  //       // let doc = 'UserData-' + user.uid
+  //       // console.log(doc, 'doc')
+  //       // await db.collection(doc).orderBy('timestamp', "asc")
+  //       //   .onSnapshot(async (result) => {
+  //       //     let array = [];
+  //       //     await result.forEach((item, index) => {
+  //       //       array.push(item.data());
+  //       //     })
+  //       //     await this.setState({
+  //       //       brewTour: array
+  //       //     })
 
-        //   })
+  //       //   })
+  //     }
+  //   })
+  // }
+  componentDidMount(){
+    // console.log(this.state, '<--- did mount')
+    const auth = firebase.auth()
+    auth.onAuthStateChanged((user) =>{
+      if(user){
+        console.log('user is logged')
+      }else{
+        this.handleSignout()
       }
     })
   }
 
   render() {
-
     if (this.state.brewTour) {
     }
 
-    const { activeItem } = this.state
     const style = {
       fontSize: '17px',
       // marginBottom: '5px'
     }
-
-    const styleFull = {
-      fontSize: '17px',
-      color: 'yellow'
-    }
-
+    
     const headingStyle = {
       color: 'white',
       fontSize: '24px',
@@ -90,17 +102,17 @@ export default class MenuExampleInvertedSecondary extends Component {
             <Link style={style} to="/">Home</Link>
 
             {
-              (this.state.loggedin) ? 
-                <Link style={this.state.brewTour ? this.state.brewTour.length < 5 ? style : styleFull : null} to="/OtherMap">View Your Tour</Link>
+              (!this.state.signout) ? 
+                <Link to="/OtherMap">View Your Tour</Link>
               : null
             }
 
             <p style={headingStyle}>Pints And Shells</p>
-            <a style={style} href="https://github.com/jawadalikhel/atx-brews-taste">GitHub</a>
+            <a href="https://github.com/jawadalikhel/atx-brews-taste">GitHub</a>
 
             {
-              (this.state.loggedin) ? <button onClick={this.handleSignout}>Logout</button>
-              : <Link style={style} to="/login">Login</Link>
+              (!this.state.signout) ? <button onClick={this.handleSignout}>Logout</button>
+              : <Link to="/">Login</Link>
             }
 
           </Menu>

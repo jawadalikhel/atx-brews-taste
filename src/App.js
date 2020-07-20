@@ -15,11 +15,11 @@ function App() {
     <div className="App">
       <NavBar />
       <Route
-        exact path='/login'
+        exact path='/'
           render={(props) => <Login  {...props} />}
       />
         <Route path="/register" component={Register}/>
-        <Route exact path="/" component={MainComponent}/>
+        <Route exact path="/private_user" component={MainComponent}/>
         <Route path="/brewTour" component={BrewTour} />
         <Route path="/OtherMap" component={OtherMap} />
     </div>

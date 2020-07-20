@@ -148,8 +148,9 @@ import Search from './Search';
         this.setState({
           loggedin: true
         })
+      }else{
+        this.props.history.push('/');
       }
-      this.props.history.push('/login');
     })
   }
 

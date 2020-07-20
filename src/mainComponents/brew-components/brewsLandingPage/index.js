@@ -15,37 +15,26 @@ class Brewery extends Component {
     }
   }
 
-  getBrewsInDB = () => {
+  getBrewsInDB = async() => {
     const db = firebase.firestore();
-   
-      firebase.auth().onAuthStateChanged(async(user) =>{
-        if (user === null) {
-          swal('Login with google to continue')
-          this.props.history.push('/login')
-        } else {
-          // let doc = 'UserData-' + user.uid
-          let allData = await db.collection('Cities').doc('Austin').collection('Breweries')
-          console.log(allData, '<---- allData')
-          allData.get()
-            .then(async(result) => {
-              console.log(result, '<-------')
-              // let array = [];
-              // await result.forEach((item, index) => {
-              //   array.push(item.data());
-              // })
-              // await this.setState({
-              //   brewsFromDB: array
-              // })
-            })
-        }
-
+    // let doc = 'UserData-' + user.uid
+    let allData = await db.collection('Cities').doc('Austin').collection('Breweries')
+    console.log(allData, '<---- allData')
+    allData.get()
+      .then(async(result) => {
+        console.log(result, '<-------')
+        // let array = [];
+        // await result.forEach((item, index) => {
+        //   array.push(item.data());
+        // })
+        // await this.setState({
+        //   brewsFromDB: array
+        // })
       })
-    
   };
 
   deleteBrew = async (place_id) => {
     const db = firebase.firestore();
-   
     firebase.auth().onAuthStateChanged(async(user) =>{
       if (user === null) {
           return;
@@ -114,11 +103,6 @@ componentDidMount() {
 }
 
   render() {
-    
-    if (this.state.brewsFromDB) {
-      console.log(this.state.brewsFromDB, '<---- brewsFromDB')
-    }
-
     const tripContainerStyle = {
       marginTop: '45%',
       marginLeft: '37%',
@@ -133,11 +117,6 @@ componentDidMount() {
 
     return (
       <div className="App">
-          {/* <div className="welcome" >
-            <h3>Whats better than a nice, cold beer? A nice, cold beer with the best tacos we could find!</h3>
-            <h3>With over 30+ Austin brewery locations across the city, each location has its own story,<br></br> providing unique perspectives on the history and making of off their own specialty.<br></br>
-            <br></br>From the historic Celis Brewery to the Sours of Jester King, each of these breweries have a captivating story to tell.</h3>
-          </div> */}
           <div style={{width: menuWidth, height: menuHeight, position: 'absolute', zIndex: '1', left: '75%', top: '25%', background: 'black', opacity: '0.8', display: 'flex', flexFlow: 'column'}}>
               <p style={{color: 'white', fontSize: '13px'}}>YOU CAN CHOSE UPTO FIVE BREWERIES</p>
               {

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import firebase from '../../../firebaseConfig';
 
 export default class MenuExampleInvertedSecondary extends Component {
-
   constructor(){
     super();
     this.state = {
@@ -19,8 +18,9 @@ export default class MenuExampleInvertedSecondary extends Component {
       this.setState({
         signout: true
       })
-    }).then(() =>{
       this.props.history.push('/')
+
+    }).then(() =>{
     })
     .catch(function(error) {
       // An error happened.
@@ -71,7 +71,7 @@ export default class MenuExampleInvertedSecondary extends Component {
           {
             (!this.state.signout) ? 
             <li class="nav-item">
-              <Link class="nav-link" to="/OtherMap">View your tours</Link>
+              <Link class="nav-link" to="/userTours">View your tours</Link>
             </li>
             : null
           }
@@ -79,46 +79,21 @@ export default class MenuExampleInvertedSecondary extends Component {
           </ul>
 
           {
-            (!this.state.signout) ? <span class="navbar-text"><a onClick={this.handleSignout}>Logout</a> </span>
-            : <span class="navbar-text"><Link to="/">Login</Link></span>
+            (!this.state.signout) ? 
+            <span class="navbar-text">
+              <a onClick={this.handleSignout}>Logout</a> 
+            </span>
+            : <span class="navbar-text">
+                <Link to="/login">Login</Link><br/>
+              </span>
           }
 
-
-          {/* <span class="navbar-text">
-            Navbar text with an inline element
-          </span> */}
+          <span class="navbar-text" style={{paddingLeft: '3em',paddingRight: '3em'}}>
+            {/* <Link to="/login">Login</Link><br/> */}
+            <a href="https://github.com/jawadalikhel/PintsAndShells" target="_blanck">Github</a>
+          </span>
         </div>
       </nav>
-      // <div>
-      //   <style>
-      //     @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
-      //     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Vidaloka');
-      // </style>
-
-      //   <Segment inverted >
-
-      //     <Menu inverted pointing secondary >
-
-      //       <Image src={require('../images/logoCircle.png')} style={{ height: '60px', marginTop: '-10px' }} />
-
-      //       <Link to="/">Home</Link>
-
-            // {
-            //   (!this.state.signout) ? 
-            //     <Link to="/OtherMap">View Your Tour</Link>
-            //   : null
-            // }
-
-      //       <p >Pints And Shells</p>
-      //       <a href="https://github.com/jawadalikhel/PintsAndShells">GitHub</a>
-
-            // {
-            //   (!this.state.signout) ? <button onClick={this.handleSignout}>Logout</button>
-            //   : <Link to="/">Login</Link>
-            // }
-      //     </Menu>
-      //   </Segment>
-      // </div>
     )
   }
 }

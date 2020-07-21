@@ -45,7 +45,7 @@ class BrewTour extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user === null) {
-        this.props.history.push('/login')
+        this.props.history.push('/')
       } else {
         this.getTourData().then((data) => {
           this.setState({

@@ -19,21 +19,16 @@ class DisplayMap extends React.PureComponent {
     }
   async componentDidMount() {
       const db = firebase.firestore();
-      let doc = 'UserData-' + firebase.auth().currentUser.uid
-     await db.collection(doc).orderBy('timestamp',"asc")
-      .onSnapshot(async(result) => {
+      const currentUserUid = firebase.auth().currentUser.uid;
+      await db.collection('UserTourData').where("userUid", "==", currentUserUid).get()
+      .then(async(result) => {
         let array = [];
         await result.forEach((item, index) => {
-          console.log(item.data().created, 'created')
           array.push(item.data());
         });
         let newArray = [];
         
         await array.forEach((item, index) => {
-          // console.log(item, index)
-          console.log(item.size)
-          console.log()
-          
           if (index > 0 && !item.hasOwnProperty('size')) {
             newArray.push({
               from: array[index-1].position,
@@ -50,22 +45,15 @@ class DisplayMap extends React.PureComponent {
     }
 
     onMarkerClick = async (props, marker, e) => {
-        console.log('hello', props)
         this.setState({
           selectedPlace: props,
           activeMarker: marker,
           showingInfoWindow: true,
           info: props
     
-        });
-        // console.log(this.state.info.photos[0])
-    
+        });    
       }
     render () {
-
-      
-      if (this.state.brewTour) console.log(this.state.brewTour, 'mirza');
-
       return(
         <GoogleMap 
         defaultZoom={10}
@@ -77,32 +65,12 @@ class DisplayMap extends React.PureComponent {
                 <DirectionRenderComponent
                   key={index}
                   index={index + 1}
-                  strokeColor={'#f68f54'}
+                  strokeColor={'#000000'}
                   from={item.from}
                   to={item.to}
                 />
             );
             }): null }            
-            {/* {
-            this.state.brews.map((item, index) => {
-              return (<Marker
-                key={index}
-                onClick = { this.onMarkerClick }
-                position = {item.position}
-                photos = {item.photos}
-                opening_hours = {item.opening_hours}
-                rating = {item.rating}
-                website = {item.website}
-                id={index}
-                name = { item.name }
-                address = { item.address }
-                place_id = { item.place_id }
-                icon = {{ url: require('../../beer.png')}}
-                style={{size:'3'}}
-              />);
-            }) } */}
-
-            
       </GoogleMap>
     )
     }

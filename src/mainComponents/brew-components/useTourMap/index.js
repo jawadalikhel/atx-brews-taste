@@ -8,66 +8,28 @@ import swal from '@sweetalert/with-react';
 class OtherMap extends React.PureComponent {
   constructor(){
     super();
-
     this.state = {
    
     }
   }
 
-  getBrewsInDB = () => {
+  getBrewsInDB = async() => {
     const db = firebase.firestore();
-    firebase.auth().onAuthStateChanged(async(user) =>{
-      console.log(user.uid, '<----- userrrr')
-      let doc = 'UserData-' + user.uid
-      console.log(doc, 'doc')
-      await db.collection(doc).orderBy('timestamp',"asc")
-        .onSnapshot(async(result) => {
+      const currentUserUid = firebase.auth().currentUser.uid;
+      await db.collection('UserTourData').where("userUid", "==", currentUserUid).get()
+        .then(async(result) => {
           let array = [];
-          await result.forEach((item, index) => {
-            console.log(item.data(), 'created/MIRZA')
-            array.push(item.data());
+          await result.forEach((brew, index) => {
+            array.push(brew.data());
           })
           await this.setState({
             brewsFromDB: array
           })
   
         })
-  
-    })
-  };
-
-  getBrewsInDB = () => {
-    const db = firebase.firestore();
-
-      // let doc = 'UserData-' + user.uid
-      // console.log(doc, 'doc')
-      // db.collection(doc).orderBy('timestamp',"asc")
-      //   .onSnapshot(async(result) => {
-      //     let array = [];
-      //     result.forEach((item, index) => {
-      //       console.log(item.data(), 'created/MIRZA')
-      //       array.push(item.data());
-      //     })
-      //     this.setState({
-      //       brewsFromDB: array
-      //     })
-  
-      //   })
-  
-  };
-
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (user === null) {
-        this.props.history.push('/login')
-      } else {
-        this.getBrewsInDB();
-      }
-    })
-  }
+    };
 
   onHover = (name, address, opening_hours, photos, rating, website) => {
-
     this.setState({
       breweryName: name,
       breweryAddress: address,
@@ -78,6 +40,16 @@ class OtherMap extends React.PureComponent {
       showBrewery: true
     })
     console.log(this.state)
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user === null) {
+        this.props.history.push('/')
+      } else {
+        this.getBrewsInDB();
+      }
+    })
   }
  
   render(){
@@ -92,7 +64,7 @@ class OtherMap extends React.PureComponent {
           <p>{this.state.breweryAddress}</p>
           <p>{this.state.breweryRating}</p>
           <a href={this.state.breweryWebsite} target="_blank">{this.state.breweryWebsite}</a> <br/>
-          <img width='500' src={this.state.breweryPhotos[index]}/>
+          {/* <img width='500' src={this.state.breweryPhotos[index]}/> */}
         </div>
       );
     }

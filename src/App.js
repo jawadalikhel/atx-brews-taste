@@ -3,22 +3,26 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import BrewTour from './mainComponents/brew-components/BrewTour';
 import NavBar from '../src/mainComponents/ui-components/NavBar';
 import Login from './mainComponents/auth/Login';
-import MainComponent from './mainComponents/brew-components/searchBrews';
+import privateLandingPage from './mainComponents/brew-components/privateLandingPage';
 import Register from './mainComponents/auth/Register';
-import OtherMap from './mainComponents/brew-components/useTourMap';
+import UserTourMap from './mainComponents/brew-components/useTourMap';
+import LandingPage from './mainComponents/ui-components/landingPage/index'
+
 function App() {
   return (
     <Router>
     <div className="">
       <NavBar />
+      <Route exact path="/" component={LandingPage}/>
+
       <Route
-        exact path='/'
+         path='/login'
           render={(props) => <Login  {...props} />}
       />
         <Route path="/register" component={Register}/>
-        <Route exact path="/private_user" component={MainComponent}/>
+        <Route path="/private_user" component={privateLandingPage}/>
         <Route path="/brewTour" component={BrewTour} />
-        <Route path="/OtherMap" component={OtherMap} />
+        <Route path="/userTours" component={UserTourMap} />
     </div>
   </Router>
   );

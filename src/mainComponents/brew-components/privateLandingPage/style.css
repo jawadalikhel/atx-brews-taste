@@ -1,0 +1,34 @@
+.p-landingpage {
+    /* background-color: red; */
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+.map-div {
+    /* position: absolute; */
+    /* grid-column: 1/2; */
+    /* background-color: green; */
+}
+
+.search-div {
+    background-color: #769FB6;
+    /* grid-column: 4/5; */
+    /* position: absolute; */
+    height: 95vh;
+    overflow: scroll;
+    text-align: center;
+    /* margin-left: 100em; */
+    /* font-size: 2em; */
+}
+
+.brew-name {
+    /* font-size: larger; */
+    font-size: 1.2vw;
+    color: white;
+}
+
+.brew-name:hover {
+    /* font-size: larger; */
+    font-size: 1.3vw;
+    color: black;
+}

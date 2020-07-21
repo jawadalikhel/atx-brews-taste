@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Map from '../MapContainer';
 import firebase from '../../../firebaseConfig';
 import swal from '@sweetalert/with-react';
-
+import './style.css';
 
 class Brewery extends Component {
   constructor(){
@@ -100,45 +100,42 @@ componentDidMount() {
 }
 
   render() {
-    const tripContainerStyle = {
-      marginTop: '45%',
-      marginLeft: '37%',
-      maxWidth: '400px',
-      position: 'relative',
-      color: 'black'
-    }
-
-    let menuHeight = window.innerHeight / 2 + 'px';
-    let menuWidth = window.innerWidth / 7 + 'px';
-    let xButton = {background: 'black', color: 'yellow', border: 'none', outline: 'none', left: '90%', position: 'absolute'};
-
+    // const tripContainerStyle = {
+    //   marginTop: '45%',
+    //   marginLeft: '37%',
+    //   maxWidth: '400px',
+    //   position: 'relative',
+    //   color: 'black'
+    // }
+    let xButton = {background: 'black', color: 'yellow', border: 'none', outline: 'none'};
     return (
-      <div className="App">
-          <div style={{width: menuWidth, height: menuHeight, position: 'absolute', zIndex: '1', left: '75%', top: '25%', background: 'black', opacity: '0.8', display: 'flex', flexFlow: 'column'}}>
-              <p style={{color: 'white', fontSize: '13px'}}>YOU CAN CHOSE UPTO FIVE BREWERIES</p>
-              {
-                this.state.brewsFromDB ? 
-                  this.state.brewsFromDB.map((item, index) => {
-                    return (
-                      <div style={{height: '100%', borderTop: this.state.brewsFromDB.length < 5 ? '1px solid white' : '1px solid yellow', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                       <button style={xButton} onClick={() => this.deleteBrew(item.place_id)}>X</button>
-                       <p style={{ fontSize: '15px'}}>{item.name}</p>
-                      </div>
-                    )
-                  })
-                  : null
-              }
+      <div className="p-landingpage">
+          <div className="search-div">
+            <p>YOU CAN CHOSE UPTO FIVE BREWERIES</p>
+            {
+              this.state.brewsFromDB ? 
+                this.state.brewsFromDB.map((item, index) => {
+                  return (
+                    <div>
+                      {/* <button onClick={() => this.deleteBrew(item.place_id)}>X</button> */}
+                      <p className="brew-name">{item.name}</p><br/>
+                    </div>
+                  )
+                })
+                : null
+            }
           </div>
 
-           <div className="mapContainer">
-              <Map style={{top: '5%'}} 
-                brewsInDbLength={this.state.brewsFromDB ? this.state.brewsFromDB.length: null} 
-                brewData={this.state.allBreweries}
-              />
+          <div >
+            <Map className="map-div"
+              brewsInDbLength={this.state.brewsFromDB ? this.state.brewsFromDB.length: null} 
+              brewData={this.state.allBreweries}
+            />
           </div>
-        <div style={tripContainerStyle} className="tripFormContainer"  >
+
+        {/* <div style={tripContainerStyle} className="tripFormContainer"  >
     
-        </div>
+        </div> */}
       </div>
     );
   }

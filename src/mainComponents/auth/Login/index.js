@@ -3,6 +3,7 @@ import { Form, Label, Button } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import FacebookLogin from 'react-facebook-login';
 import { Link } from 'react-router-dom';
+import './login.css';
 import firebase from '../../../firebaseConfig'
 
 class Login extends Component {
@@ -28,8 +29,6 @@ class Login extends Component {
     firebase.auth().signInWithPopup(provider)
     .then(async(user) => {
       if(user.additionalUserInfo.isNewUser){
-        console.log(user, '<---- user')
-        console.log(firebase.auth().currentUser.uid)
         let currentUser = firebase.auth().currentUser.uid;
         let userData = {
            name: user.additionalUserInfo.profile.name,
@@ -52,20 +51,6 @@ class Login extends Component {
 
 
         await addUserToDB.json()
-        // .then(() =>{
-        //   const db = firebase.firestore();
-        //   db.collection('User').doc(firebase.auth().currentUser.uid)
-        //   .set({
-        //     name: user.additionalUserInfo.profile.name,
-        //     id: user.additionalUserInfo.profile.id,
-        //     email: user.additionalUserInfo.profile.email,
-        //     family_name: user.additionalUserInfo.profile.family_name,
-        //     given_name: user.additionalUserInfo.profile.given_name,
-        //     googleUserId: user.user.uid
-        //   }).then((result) =>{
-        //     console.log('user added to firestore')
-        //   })
-        // })
       }else{
         // console.log(user, '<--- returned user')
         this.props.history.push('/private_user')
@@ -77,12 +62,12 @@ class Login extends Component {
     return (
 
       <div className="Login">
-        <h2>Sign in below with Google</h2>
+        <h1>Welcome to PintsAndShells</h1>
+        <h3>Sign in below with Google</h3>
         <br />
         <br />
         <Button onClick={this.handleSubmit}>Google Login</Button>
       </div>
-
       )
   }
 }

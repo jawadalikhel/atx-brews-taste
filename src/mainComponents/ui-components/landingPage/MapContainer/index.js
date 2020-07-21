@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Button, Image, Form, Label, Input } from 'semantic-ui-react';
 import ReactDOM from "react-dom";
- import swal from '@sweetalert/with-react';
 import './Map.css';
-import firebase from '../../../firebaseConfig';
-import Search from './Search';
+import firebase from '../../../../firebaseConfig';
 
 
  import { GoogleApiWrapper, InfoWindow, Map, Marker, Content, Places, Directions, MapViewDirections, MapView } from 'google-maps-react';
@@ -39,95 +37,24 @@ import Search from './Search';
   }
 
   onInfoWindowOpen(props, e) {
-    const currentUserUid = firebase.auth().currentUser.uid;
-    let db = firebase.firestore()
-
-    db.collection('UserTourData').where("userUid", "==", currentUserUid).get()
-    .then((result) =>{
-      if (result.size < 5) {
         const button = (
-          <Button color="blue" onClick={
-            this.addTour.bind(null, this.state.info)
-            }
-          >Add to Brew Tour</Button>
+          <a href="/login">Login to add brew to your tour</a>
         );
       
         ReactDOM.render(
           React.Children.only(button),
           document.getElementById("aTour")
         )
-    }else{
-        const button = (
-          <h1>Max 5 brews to tour</h1>
-        )
-
-        ReactDOM.render(
-          React.Children.only(button),
-          document.getElementById("aTour")
-        )
-      }
-    }).catch((error) =>{
-      console.log(error, '<--- error on onInfoWindoOpen')
-    })
-  }
-
-  addTour = async (brewery, e) => {
-    const db = firebase.firestore();
-    
-    this.state.showingInfoWindow = false;
-    e.preventDefault();
-    swal(brewery.name + ' Has Been Added In Your Tour!');
-
-    let jsonObj = {};
-    jsonObj['timestamp'] = new Date().toLocaleString();
-
-    if (brewery.name) {
-     jsonObj['name'] = brewery.name;
-    }
-    if (brewery.address) {
-      jsonObj['address'] = brewery.address;
-    }
-    if (brewery.opening_hours) {
-      jsonObj['opening_hours'] = brewery.opening_hours;
-    }
-    if (brewery.photos) {
-      jsonObj['photos'] = brewery.photos;
-    }
-    if (brewery.rating) {
-      jsonObj['rating'] = brewery.rating;
-    }
-    if (brewery.place_id) {
-      jsonObj['place_id'] = brewery.place_id;
-    }
-    if (brewery.website) {
-      jsonObj['website'] = brewery.website;
-    } 
-    if (brewery.position) {
-      jsonObj['position'] = brewery.position;
-    }
-    let userUid = firebase.auth().currentUser.uid;
-
-    if(userUid){
-      jsonObj.userUid = userUid
-    }
-    
-    db.collection('UserTourData')
-    .add(jsonObj)
-    .then(() => {
-      // console.log(result.data(), '1243')
-      // result.forEach(x => console.log(x.data()))
-    })
   }
 
   getBreweries = async () => {
-
       const db = firebase.firestore();
       await db.collection('Cities').doc('Austin').collection('Breweries').doc('f5gsFkgW92BSmlMqUSaT')
       .get()
       .then(async(result) => {
         let array = [];
           await result.data().data.forEach(async(brewery) => {
-              await array.push(brewery);
+            await array.push(brewery);
         })
         return array
       })
@@ -136,7 +63,6 @@ import Search from './Search';
           let nameArray = [];
 
           await data.forEach((brewery) =>{
-            // console.log(brewery, '<---- ')
             let obj = {
               name: brewery.name,
               address: brewery.address,
@@ -158,8 +84,6 @@ import Search from './Search';
             brews: newArray,
             autoFillNames: nameArray
           })
-
-          // console.log(this.state.brews, '<-------')
         }).catch((error) =>{
         console.log(error, '<--- error with fetchin brews')
       })
@@ -167,25 +91,13 @@ import Search from './Search';
 
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) =>{
-      if(user){
-        this.getBreweries()
-        this.setState({
-          loggedin: true
-        })
-      }else{
-        this.props.history.push('/');
-      }
-    })
+    this.getBreweries()
   }
 
   render() {
-    let mapHeight = window.innerHeight - 110 + 'px';
     const style = {
-      width: '75vw',
-      // borderRight: '10px solid black',
+      width: '100vw',
       height: '92vh',
-      // marginTop: '5em',
       position: 'absolute',
     }
 
@@ -194,7 +106,6 @@ import Search from './Search';
         panControl: false,
         mapTypeControl: true,
         mapTypeControlOptions: {
-          // style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
           mapTypeIds: ['roadmap', 'terrain']
         },
         scrollwheel: false,
@@ -203,10 +114,7 @@ import Search from './Search';
     }
     
     return (
-      <div >
-        {
-          (this.state.loggedin) ?
-          <div>
+      <div className="map-div">
                <Map
               //  className="map"
                 item
@@ -218,19 +126,17 @@ import Search from './Search';
                 initialCenter = {{ lat: 30.3005, lng: -97.7388 }}
                 mapTypeControl = {true}
                 mapTypeControlOptions = {{
-                  // style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
                   mapTypeIds: ['roadmap', 'terrain']
                 }}
                 options={createMapOptions}
               > 
               {/* search component */}
-              { 
+              {/* { 
                 this.state.autoFillNames ? <Search className="search" suggestions={this.state.autoFillNames} /> : null 
-              }
+              } */}
 
               {
                 this.state.brews ? this.state.brews.map((item, index) => {
-                  // console.log(item, '<------')
                   return (<Marker
                     key={index}
                     onClick = { this.onMarkerClick }
@@ -244,7 +150,7 @@ import Search from './Search';
                     name = { item.name }
                     address = { item.address }
                     place_id = { item.place_id }
-                    icon = {{ url: require('../../ui-components/images/beerP.ico')}}
+                    icon = {{ url: require('../../images/beerP.ico')}}
                     style={{size:'3'}}
                   />);
                 }) : null
@@ -281,8 +187,6 @@ import Search from './Search';
 
                 </InfoWindow>
               </Map>
-          </div> : null
-        }
       </div>
     );
   }

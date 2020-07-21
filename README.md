@@ -2,7 +2,7 @@
 A User-friendly platform to locate breweries in and around Austin, TX and also give locations to nearby places to get tacos
 
 ## Link to Site - Deployed
-COMMING SOON
+https://atx-brews-taste.firebaseapp.com/
 
 ## Languages Used
 - HTML

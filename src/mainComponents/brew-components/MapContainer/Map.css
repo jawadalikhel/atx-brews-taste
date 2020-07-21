@@ -1,3 +1,20 @@
+.map-container {
+  border: 10px solid red;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+}
+
+.map {
+  border: 10px solid black;
+  display: absoult;
+  grid-column: 1/2;
+}
+
+.search {
+  border: 10px solid red;
+}
+
 .fade fade-appear {
   opacity: 0;
   z-index: 1;

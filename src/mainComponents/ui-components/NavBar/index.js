@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import './nav.css';
 import { Menu, Segment, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import firebase from '../../../firebaseConfig';
-// import '../App.css';
 
 export default class MenuExampleInvertedSecondary extends Component {
 
@@ -14,10 +14,8 @@ export default class MenuExampleInvertedSecondary extends Component {
     }
   }
 
-  handleSignout = (e) =>{
-    // e.preventDefault()
+  handleSignout = () =>{
     firebase.auth().signOut().then((result)=> {
-      console.log(result, '<---- logged out result')
       this.setState({
         signout: true
       })
@@ -29,95 +27,98 @@ export default class MenuExampleInvertedSecondary extends Component {
     });
   }
 
-  // componentDidMount() {
-  //   const db = firebase.firestore();
-  //   firebase.auth().onAuthStateChanged(async (user) => {
-  //     if (user === null) {
-  //       return;
-  //     } else {
-  //       // let doc = 'UserData-' + user.uid
-  //       // console.log(doc, 'doc')
-  //       // await db.collection(doc).orderBy('timestamp', "asc")
-  //       //   .onSnapshot(async (result) => {
-  //       //     let array = [];
-  //       //     await result.forEach((item, index) => {
-  //       //       array.push(item.data());
-  //       //     })
-  //       //     await this.setState({
-  //       //       brewTour: array
-  //       //     })
-
-  //       //   })
-  //     }
-  //   })
-  // }
   componentDidMount(){
-    // console.log(this.state, '<--- did mount')
     const auth = firebase.auth()
     auth.onAuthStateChanged((user) =>{
       if(user){
         console.log('user is logged')
+        this.setState({
+          signout: false
+        })
       }else{
-        this.handleSignout()
+        this.setState({
+          signout: true
+        })
       }
     })
   }
 
   render() {
-    if (this.state.brewTour) {
-    }
-
-    const style = {
-      fontSize: '17px',
-      // marginBottom: '5px'
-    }
-    
-    const headingStyle = {
-      color: 'white',
-      fontSize: '24px',
-      marginLeft: '27%'
-    }
-
-    const navBar = {
-      position: 'relative',
-      marginBottom: '10px',
-      // top: 0,
-      zIndex: '2',
-    }
-
-
     return (
-      <div className='navBar' style={navBar}>
-        <style>
-          @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
-          @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Vidaloka');
-      </style>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        {
+          (!this.state.signout) ? 
+          <a class="navbar-brand" href="/private_user"><Image src={require('../images/logoCircle.png')} style={{ height: '60px', marginTop: '-10px' }} /></a>
+          : 
+          <a class="navbar-brand" href="/"><Image src={require('../images/logoCircle.png')} style={{ height: '60px', marginTop: '-10px' }} /></a>
+        }
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
 
-        <Segment inverted >
+          {
+            (!this.state.signout) ? 
+            <li class="nav-item">
+              <Link class="nav-link" to="/private_user">Home <span class="sr-only">(current)</span></Link>
+            </li>
+            : null
 
-          <Menu inverted pointing secondary style={{ height: '20px' }}>
+          }
 
-            <Image src={require('../images/logoCircle.png')} style={{ height: '60px', marginTop: '-10px' }} />
+          {
+            (!this.state.signout) ? 
+            <li class="nav-item">
+              <Link class="nav-link" to="/OtherMap">View your tours</Link>
+            </li>
+            : null
+          }
 
-            <Link style={style} to="/">Home</Link>
+          </ul>
 
-            {
-              (!this.state.signout) ? 
-                <Link to="/OtherMap">View Your Tour</Link>
-              : null
-            }
+          {
+            (!this.state.signout) ? <span class="navbar-text"><a onClick={this.handleSignout}>Logout</a> </span>
+            : <span class="navbar-text"><Link to="/">Login</Link></span>
+          }
 
-            <p style={headingStyle}>Pints And Shells</p>
-            <a href="https://github.com/jawadalikhel/atx-brews-taste">GitHub</a>
 
-            {
-              (!this.state.signout) ? <button onClick={this.handleSignout}>Logout</button>
-              : <Link to="/">Login</Link>
-            }
+          {/* <span class="navbar-text">
+            Navbar text with an inline element
+          </span> */}
+        </div>
+      </nav>
+      // <div>
+      //   <style>
+      //     @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+      //     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Vidaloka');
+      // </style>
 
-          </Menu>
-        </Segment>
-      </div>
+      //   <Segment inverted >
+
+      //     <Menu inverted pointing secondary >
+
+      //       <Image src={require('../images/logoCircle.png')} style={{ height: '60px', marginTop: '-10px' }} />
+
+      //       <Link to="/">Home</Link>
+
+            // {
+            //   (!this.state.signout) ? 
+            //     <Link to="/OtherMap">View Your Tour</Link>
+            //   : null
+            // }
+
+      //       <p >Pints And Shells</p>
+      //       <a href="https://github.com/jawadalikhel/PintsAndShells">GitHub</a>
+
+            // {
+            //   (!this.state.signout) ? <button onClick={this.handleSignout}>Logout</button>
+            //   : <Link to="/">Login</Link>
+            // }
+      //     </Menu>
+      //   </Segment>
+      // </div>
     )
   }
 }

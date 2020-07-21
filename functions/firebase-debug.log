@@ -1,0 +1,14 @@
+[debug] [2020-07-21T05:21:35.785Z] ----------------------------------------------------------------------
+[debug] [2020-07-21T05:21:35.787Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy --only functions:saveAllBrewriesFromCityFromGooglePlacesToFirestore
+[debug] [2020-07-21T05:21:35.787Z] CLI Version:   8.5.0
+[debug] [2020-07-21T05:21:35.787Z] Platform:      darwin
+[debug] [2020-07-21T05:21:35.788Z] Node Version:  v14.5.0
+[debug] [2020-07-21T05:21:35.793Z] Time:          Tue Jul 21 2020 00:21:35 GMT-0500 (Central Daylight Time)
+[debug] [2020-07-21T05:21:35.794Z] ----------------------------------------------------------------------
+[debug] [2020-07-21T05:21:35.794Z] 
+[debug] [2020-07-21T05:21:35.808Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-21T05:21:35.809Z] > authorizing via signed-in user
+[debug] [2020-07-21T05:21:35.809Z] [iam] checking project atx-brews-taste for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2020-07-21T05:21:35.811Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-07-21T05:21:35.811Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>

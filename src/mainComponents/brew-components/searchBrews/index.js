@@ -17,19 +17,17 @@ class Brewery extends Component {
 
   getBrewsInDB = async() => {
     const db = firebase.firestore();
-    // let doc = 'UserData-' + user.uid
-    let allData = await db.collection('Cities').doc('Austin').collection('Breweries')
-    console.log(allData, '<---- allData')
-    allData.get()
-      .then(async(result) => {
-        console.log(result, '<-------')
-        // let array = [];
-        // await result.forEach((item, index) => {
-        //   array.push(item.data());
-        // })
-        // await this.setState({
-        //   brewsFromDB: array
-        // })
+    await db.collection('Cities').doc('Austin').collection('Breweries').doc('f5gsFkgW92BSmlMqUSaT')
+    .get().then(async(doc) => {
+        let array = [];
+        await doc.data().data.forEach((brew, index) => {
+          array.push(brew);
+        })
+        this.setState({
+          brewsFromDB: array
+        })
+
+        return array;
       })
   };
 
@@ -93,8 +91,7 @@ getGeoLocation = async (data,  index) => {
 componentDidMount() {
   firebase.auth().onAuthStateChanged((user) =>{
     if(user){
-      this.getBrewsInDB();
-      console.log(user, '<---- userrrr')
+      this.getBrewsInDB()
     }else{
       this.props.history.push('/');
     }

@@ -102,41 +102,43 @@ import Search from './Search';
   getBreweries = async () => {
 
       const db = firebase.firestore();
-      await db.collection('Cities').doc('Austin').collection('Breweries')
+      await db.collection('Cities').doc('Austin').collection('Breweries').doc('f5gsFkgW92BSmlMqUSaT')
       .get()
       .then(async(result) => {
         let array = [];
-          await result.forEach(async(brewery) => {
-              await array.push(brewery.data());
+          await result.data().data.forEach(async(brewery) => {
+              await array.push(brewery);
         })
-        let newArray = [];
-        let nameArray = [];
-         await array.forEach((brewery) => {
-          if(brewery.hasOwnProperty('geometry')) {
+        return array
+      })
+      .then(async (data) =>{
+          let newArray = [];
+          let nameArray = [];
 
-              let obj = {
-                name: brewery.name,
-                address: brewery.formatted_address,
-                position: {
-                  lat: brewery.geometry.location.lat,
-                  lng: brewery.geometry.location.lng
-                },
-                place_id: brewery.place_id,
-                rating: brewery.rating,
-                website: brewery.website,
-                photos: brewery.photos,
-                opening_hours: brewery.opening_hours,
-              }
-              
-              nameArray.push(brewery.name);
-              newArray.push(obj);
-
-          }
-        })
-        await this.setState({
-          brews: newArray,
-          autoFillNames: nameArray
-        })
+          await data.forEach((brewery) =>{
+            let obj = {
+              name: brewery.name,
+              address: brewery.formatted_address,
+              position: {
+                lat: brewery.position.lat,
+                lng: brewery.position.lng
+              },
+              place_id: brewery.place_id,
+              rating: brewery.rating,
+              website: brewery.website,
+              photos: brewery.photos,
+              opening_hours: brewery.opening_hours,
+            }
+            
+            nameArray.push(brewery.name);
+            newArray.push(obj);
+          })
+          await this.setState({
+            brews: newArray,
+            autoFillNames: nameArray
+          })
+        }).catch((error) =>{
+        console.log(error, '<--- error with fetchin brews')
       })
   }
 
@@ -155,12 +157,11 @@ import Search from './Search';
   }
 
   render() {
-    let mapHeight = window.innerHeight - 30 + 'px';
+    let mapHeight = window.innerHeight - 50 + 'px';
     const style = {
-      width: '100%',
-      height: mapHeight,
-      position: 'fixed',
-      border: '1px solid black',
+      width: '80vw',
+      height: '80vh',
+      position: 'absolute',
     }
 
     const createMapOptions = (maps) => {
@@ -177,11 +178,12 @@ import Search from './Search';
     }
     
     return (
-      <div>
+      <div >
         {
           (this.state.loggedin) ?
-          <div>
+          <div className="map-container">
                <Map
+               className="map"
                 item
                 xs = { 12 }
                 style = { style }
@@ -196,11 +198,10 @@ import Search from './Search';
                 }}
                 options={createMapOptions}
               > 
-                {this.state.autoFillNames ? (
-                  <Search
-                    suggestions={this.state.autoFillNames}
-                />
-                ) : null}
+              {/* search component */}
+              { 
+                this.state.autoFillNames ? <Search className="search" suggestions={this.state.autoFillNames} /> : null 
+              }
 
               {
                 this.state.brews ? this.state.brews.map((item, index) => {
@@ -255,8 +256,6 @@ import Search from './Search';
               </Map>
           </div> : null
         }
-
-
       </div>
     );
   }

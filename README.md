@@ -30,6 +30,13 @@ https://atx-brews-taste.firebaseapp.com/
 - firebase cloud functions
 - Nodejs
 
+## Demo
+
+<img src="./public/images/one.png">
+<img src="./public/images/two.png">
+<img src="./public/images/three.png">
+<img src="./public/images/four.png">
+
 ### Dependencies
   -"@sweetalert/with-react": "^0.1.1",
   -"@testing-library/jest-dom": "^4.2.4",
